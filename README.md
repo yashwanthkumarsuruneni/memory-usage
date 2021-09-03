@@ -17,4 +17,7 @@ pip3 install -r requirements.txt
 python3 index.py
 ```
 
+Generates the output in three different files (output.xml,output.json,output.yaml).
+
+
 

@@ -66,7 +66,7 @@ def stats():
 
 # main 
 def main():
-    print("This program calculates the memory usage\n")
+    print("This program calculates the memory usage")
     output = stats()
     #convert to xml
     xml=dict_to_xml(output)
@@ -78,8 +78,6 @@ def main():
     write_to_yaml('output.yaml',output)
 
 main()
-
-
 
 
 
