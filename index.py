@@ -1,3 +1,4 @@
+# imports
 import pandas as pd
 from dict2xml import dict2xml
 import yaml
@@ -9,30 +10,29 @@ data = pd.read_csv("input.csv")
 def Average(lst):
     return round(sum(lst) / len(lst),2)
 
-
 def dict_to_xml(agg_dict):
-    # convert to xml
+    """Convert to xml."""
     xml = dict2xml(agg_dict)
     return xml
 
 def write_to_xml(file_name,data):
-    # open file to write
+    """Write to xml."""
     with open(file_name,'w') as f:
         f.write(data)
 
 def write_to_yaml(file_name,data):
-    # open file to write
+    """Write to yaml."""
     with open(file_name,'w') as f:
         yaml.dump(data, f)
 
-
 def write_to_json(file_name,data):
-    # open file to write
+    """Write to json."""
     with open(file_name, "w") as f:  
         json.dump(data, f)
 
 # calculate the stats 
 def stats():
+    """Calculate the summary."""
     agg_values = []
     total_sum=total_count=0
     agg_min=float('inf')
@@ -50,11 +50,13 @@ def stats():
         if "#" in column:
             host_name,host_max,host_min,host_avg=column.split("#")[1],column_obj.values.max(), column_obj.values.min() , Average(column_obj.values)
             print(column.split("#")[1], column_obj.values.max(), column_obj.values.min() , Average(column_obj.values))
+            # Cleanup the missing values
             values=[x for x in column_obj.values if str(x) != 'nan']
             total_sum+=sum(values)
             total_count+=len(values)
             agg_max=max(agg_max,host_max)
             agg_min=min(agg_min,host_min)
+            # convert nan to 'nan' (to generate yaml successfully)
             host_map={"max": str(host_max) if str(host_max) == 'nan' else int(host_max),"min": str(host_min) if str(host_min) == 'nan' else int(host_min),"average":str(host_avg) if str(host_avg) == 'nan' else int(host_avg),"name":host_name}
             summary["hosts"].append(host_map)
             
@@ -67,6 +69,7 @@ def stats():
 # main 
 def main():
     print("This program calculates the memory usage")
+    # find the summary
     output = stats()
     #convert to xml
     xml=dict_to_xml(output)
